@@ -1,0 +1,9 @@
+#!/bin/bash
+myphp=$(dpkg-query -W -f='${Status}' phpmyadmin 2>/dev/null | grep -c "ok installed")
+if [ $myphp -eq 0 ]; then
+	echo "Paigaldame myphpadminit"
+	apt-get update #installib uuendused
+	apt-get install phpmyadmin php-mbstring php-gettext
+elif [ $myphp -eq 1 ]; then
+	echo "myphpadmin on paigaldatud"
+fi
