@@ -1,0 +1,47 @@
+#!/bin/bash
+#wordpresis install
+APACHE2=$(dpkg-query -W -f='${Status}' apache2 2>/dev/null | grep -c "ok installed")
+#Kontrollib kas apache on juba paigaldatud
+if [ $APACHE2 -eq 0 ]; then #kui väärtus on 0 siis hakkab apachet paigaldama
+	echo "Apachet paigaldatakse"
+	apt-get install -y apache2 #paigaldamise command
+elif [ $APACHE2 -eq 1 ]; then #kui väärtus on 1 siis ütleb et apache on paigaldatud
+	echo "Apache2 on installitud"
+mysql=$(dpkg-query -W -f='${Status}' mysql-server 2>/dev/null | grep -c "ok installed")
+if [ $mysql -eq 0 ]; then
+	echo "Paigaldame mysql"
+	cd /tmp
+	wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+	apt-get install -y dpkg -i mysql-apt-config* #lisab tarkvara paketid
+	apt-get install -y mysql-server
+elif [ $mysql -eq 1 ]; then
+	echo "mysql paigaldatud"
+php=$(dpkg-query -W -f='${Status}' php7.3 2>/dev/null | grep -c "ok installed")
+if [ $php -eq 0 ]; then
+	echo "Paigaldame php"
+	apt-get install -y ca-certificates apt-transport-https lsb-release
+	wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+	echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php7.3.list
+	#võtab internetist võtmed ja installib sertifikaadid
+	apt-get update #installib uuendused
+	apt-get install -y php7.3 php7.3-cli php7.3-common php7.3-opcache php7.3-curl php7.3-mbstring php7.3-mysql php7.3-zip php7.3-xml
+elif [ $php -eq 1 ]; then
+	echo "php paigaldatud"
+myphp=$(dpkg-query -W -f='${Status}' phpmyadmin 2>/dev/null | grep -c "ok installed")
+if [ $myphp -eq 0 ]; then
+	echo "Paigaldame myphpadminit"
+	apt-get update #installib uuendused
+	apt-get install phpmyadmin php-mbstring php-gettext
+elif [ $myphp -eq 1 ]; then
+	echo "myphpadmin on paigaldatud"
+wp=$(dpkg-query -W -f='${Status}' wordpress 2>/dev/null | grep -c "ok installed")
+if [ $wp -eq 0 ]; then
+        echo "wordpressi paigaldatakse"
+        apt-get install -y wordpress
+elif [ $wp -eq 1 ]; then
+        echo "wordpress on installitud"
+fi
+fi
+fi
+fi
+fi
