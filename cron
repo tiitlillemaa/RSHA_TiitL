@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+#See skript salvestab kellaaja ja kuupäeva kasutaja soovitud formaadis faili sisse.
+#
+kokku=`date`;
+kuu=`date | awk -F" " '{ print $2 }'`;
+kuup2ev=`date | awk -F" " '{ print $3 }'`;
+p2ev=`date | awk -F" " '{ print $1 }'`;
+kellaaeg=`date | awk -F" " '{ print $4 }'`;
+riik=`date | awk -F" " '{ print $5 }'`;
+aasta=`date | awk -F" " '{ print $6 }'`;
+number=`date | awk -F" " '{ print $4 }' | awk -F: '{ print $2 }'`;
+#Nende käskudega lõigatakse date käsust välja vajalikud osad, et neid kasutada vajalikus formaadis
+echo "Tänane kuupäev on $kuu $kuup2ev $aasta. Kell on $kellaaeg. See on $riik aeg." >> /home/user/RSHA/cron_proov
+#Selle käsuga salvestatakse vajalikud andmed faili
