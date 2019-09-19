@@ -1,0 +1,12 @@
+#!/bin/bash
+mysql=$(dpkg-query -W -f='${Status}' mysql-server 2>/dev/null | grep -c "ok installed")
+if [ $mysql -eq 0 ]; then
+	echo "Paigaldame mysql"
+	cd /tmp
+	wget https://dev.mysql.com/get/mysql-apt-config_0.8.10-1_all.deb
+	apt-get install -y dpkg -i mysql-apt-config* #lisab tarkvara paketid
+	apt-get install -y mysql-server
+elif [ $mysql -eq 1 ]; then
+	echo "mysql paigaldatud"
+	service mysql status
+fi
